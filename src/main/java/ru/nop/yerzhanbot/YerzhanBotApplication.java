@@ -10,5 +10,4 @@ public class YerzhanBotApplication {
         SpringApplication.run(YerzhanBotApplication.class, args);
     }
 
-
 }
