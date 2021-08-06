@@ -17,8 +17,8 @@ public class Game {
 
     private String imageUrl;
 
-    private Float selloutPrice;
+    private String discountPercent;
 
-    private Float price;
+    private String price;
 
 }

@@ -8,7 +8,6 @@ import org.javacord.api.DiscordApiBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 
 import java.util.List;
@@ -27,7 +26,6 @@ public class BotSetupConfig {
 
     @Bean
     @ConfigurationProperties("discord-api")
-    @Scope("singleton")
     public DiscordApi discordApi() {
         log.info("Initialising api");
         String token = environment.getProperty("TOKEN");
