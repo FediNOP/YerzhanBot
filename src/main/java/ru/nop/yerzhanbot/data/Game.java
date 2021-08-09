@@ -11,14 +11,21 @@ public class Game {
 
     private String name;
 
-    private String description;
-
     private String url;
 
     private String imageUrl;
 
-    private String discountPercent;
+    private Integer discountPercent;
 
     private String price;
+
+    public Game() {
+        this.id = "";
+        this.name = "";
+        this.url = "";
+        this.imageUrl = "";
+        this.discountPercent = 0;
+        this.price = "";
+    }
 
 }

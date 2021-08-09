@@ -25,13 +25,24 @@ public class GameSystemCommand implements CommandExecutor {
         if (message.getContent().isEmpty()) {
             return;
         }
-        channel.sendMessage(storeService.addGameToCheckLit(message.getContent().replace(ADD, "").trim()));
+        String request = message.getContent().replace(ADD, "").trim();
+        channel.sendMessage(storeService.addGameToCheckLit(request));
     }
 
-//    @Command(aliases = "!test", description = "Test")
-//    public void test(ServerTextChannel channel, Message message) {
-//        var embedBuilder = new EmbedBuilder().setColor(Color.RED).setFooter("asdas").setAuthor(message.getAuthor());
-//        channel.sendMessage(embedBuilder);
-//    }
+    @Command(aliases = "!thisChannel", description = "Set notify channel")
+    public void setNotifyChannel(ServerTextChannel channel){
+        storeService.setNotifyChannel(channel);
+        channel.sendMessage("Канал для уведомлений успешно изменен");
+    }
+
+    @Command(aliases = "!checkSellout", description = "Get sellout games")
+    public void checkSellout(){
+        storeService.runCheckSellout();
+    }
+
+    @Command(aliases = "!getCheckList", description = "Get check list")
+    public void checkSellout(ServerTextChannel channel){
+     channel.sendMessage(storeService.getCheckList());
+    }
 
 }

@@ -2,6 +2,7 @@ package ru.nop.yerzhanbot.config;
 
 import de.btobastian.sdcf4j.CommandExecutor;
 import de.btobastian.sdcf4j.handler.JavacordHandler;
+import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -29,7 +30,9 @@ public class BotSetupConfig {
     public DiscordApi discordApi() {
         log.info("Initialising api");
         String token = environment.getProperty("TOKEN");
-        log.info(token);
+        if (StringUtil.isNullOrEmpty(token)) {
+            log.error("No token found!");
+        }
         var discordApi = new DiscordApiBuilder().setToken(token).login().join();
         var javacordHandler = new JavacordHandler(discordApi);
         commandExecutors.forEach(javacordHandler::registerCommand);
