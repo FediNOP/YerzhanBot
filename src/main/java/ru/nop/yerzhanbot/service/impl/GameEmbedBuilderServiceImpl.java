@@ -33,12 +33,8 @@ public class GameEmbedBuilderServiceImpl implements GameEmbedBuilderService {
 
     @Override
     public EmbedBuilder createListOfEmbedGames(Iterable<Game> gameList) {
-
         var embedBuilder = new EmbedBuilder();
-        gameList.forEach(game -> {
-            embedBuilder.addField(ID, game.getId(), true);
-            embedBuilder.addField(NAME, game.getName());
-        });
+        gameList.forEach(game -> embedBuilder.addField(NAME + ": " + game.getName(), ID + ": " + game.getId()));
         return embedBuilder;
     }
 
