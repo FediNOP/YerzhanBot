@@ -6,7 +6,6 @@ import ru.nop.yerzhanbot.data.Game;
 import ru.nop.yerzhanbot.service.GameEmbedBuilderService;
 
 import java.awt.*;
-import java.util.List;
 
 @Component
 public class GameEmbedBuilderServiceImpl implements GameEmbedBuilderService {
@@ -33,11 +32,11 @@ public class GameEmbedBuilderServiceImpl implements GameEmbedBuilderService {
     }
 
     @Override
-    public EmbedBuilder createListOfEmbedGames(List<Game> gameList) {
+    public EmbedBuilder createListOfEmbedGames(Iterable<Game> gameList) {
 
         var embedBuilder = new EmbedBuilder();
         gameList.forEach(game -> {
-            embedBuilder.addField(ID, game.getId(),true);
+            embedBuilder.addField(ID, game.getId(), true);
             embedBuilder.addField(NAME, game.getName());
         });
         return embedBuilder;
