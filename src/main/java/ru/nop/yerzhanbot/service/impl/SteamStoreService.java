@@ -38,14 +38,13 @@ public class SteamStoreService implements StoreService {
 
 
     @Override
-    public EmbedBuilder addGameToCheckLit(String request) {
-
+    public EmbedBuilder addGameToCheckList(String request) {
         var game = storeRequestService.findGame(request);
         if (game == null || StringUtil.isNullOrEmpty(game.getId())) {
             return new EmbedBuilder().setTitle("Игра не найдена");
         }
         if (gameRepo.existsById(game.getId())) {
-            return new EmbedBuilder().setTitle("Игра уже добавлена");
+            return new EmbedBuilder().setTitle(game.getName()).setDescription("Игра уже добавлена");
         }
         gameRepo.save(game);
         log.info("Game {} is added to check list", game.getId());
@@ -53,8 +52,20 @@ public class SteamStoreService implements StoreService {
     }
 
     @Override
-    public void runCheckSellout() {
+    public EmbedBuilder removeGameFromChecklist(String request) {
+        var game = gameRepo.findById(request).orElse(null);
+        if (game == null) {
+            return new EmbedBuilder().setTitle("Игра не найдена");
+        }
+        gameRepo.delete(game);
+        log.info("Game {} is deleted", game.toString());
+        var embedGames = gameEmbedBuilderService.createListOfEmbedGames(List.of(game));
+        embedGames.setTitle("Игра удалена");
+        return embedGames;
+    }
 
+    @Override
+    public void runCheckSellout() {
         if (channel == null) {
             log.warn("No channel set");
             return;

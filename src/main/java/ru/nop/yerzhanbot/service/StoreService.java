@@ -5,7 +5,9 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 
 public interface StoreService {
 
-    EmbedBuilder addGameToCheckLit(String request);
+    EmbedBuilder addGameToCheckList(String request);
+
+    EmbedBuilder removeGameFromChecklist(String request);
 
     void setNotifyChannel(ServerTextChannel channel);
 

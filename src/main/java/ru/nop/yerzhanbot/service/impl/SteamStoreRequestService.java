@@ -26,6 +26,7 @@ public class SteamStoreRequestService implements StoreRequestService {
     public Game findGame(String id) {
 
         var connection = getResponse(String.format(APP_DETAILS, id));
+        log.info(connection.getStatusCode().toString());
         var body = getBody(connection);
         if (body == null) {
             log.warn("Game id {} request not found", id);
