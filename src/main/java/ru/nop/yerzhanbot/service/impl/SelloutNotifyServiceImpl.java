@@ -16,7 +16,7 @@ public class SelloutNotifyServiceImpl implements SelloutNotifyService {
         this.storeService = storeService;
     }
 
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(cron = "0 0 9 * * ?")
     @Override
     public void run() {
         log.info("Checking sellout task");
