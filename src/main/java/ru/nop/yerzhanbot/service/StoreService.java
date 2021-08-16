@@ -1,6 +1,6 @@
 package ru.nop.yerzhanbot.service;
 
-import org.javacord.api.entity.channel.ServerTextChannel;
+import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
 public interface StoreService {
@@ -9,7 +9,7 @@ public interface StoreService {
 
     EmbedBuilder removeGameFromChecklist(String request);
 
-    void setNotifyChannel(ServerTextChannel channel);
+    EmbedBuilder setNotifyChannel(TextChannel channel);
 
     void runCheckSellout();
 

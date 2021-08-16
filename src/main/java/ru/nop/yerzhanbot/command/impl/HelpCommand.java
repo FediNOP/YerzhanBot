@@ -20,7 +20,7 @@ public class HelpCommand implements Command {
     @Override
     public void performCommand(TextChannel channel, String message) {
         var embedBuilder = new EmbedBuilder();
-        embedBuilder.setTitle("Команда которые осилит Ержан");
+        embedBuilder.setTitle("Команды которые осилит Ержан");
         embedBuilder.setDescription("Ержан [один из вариантов команды] [значение]");
 
         commands.forEach(command -> {

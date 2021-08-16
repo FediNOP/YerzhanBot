@@ -2,7 +2,7 @@ package ru.nop.yerzhanbot.service.impl;
 
 import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.javacord.api.entity.channel.ServerTextChannel;
+import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -27,7 +27,7 @@ public class SteamStoreService implements StoreService {
     private final GameEmbedBuilderService gameEmbedBuilderService;
     private final GameRepo gameRepo;
     private final SettingRepo settingRepo;
-    private ServerTextChannel channel;
+    private TextChannel channel;
 
     public SteamStoreService(StoreRequestService storeRequestService, GameEmbedBuilderService gameEmbedBuilderService, GameRepo gameRepo, SettingRepo settingRepo) {
         this.storeRequestService = storeRequestService;
@@ -93,10 +93,11 @@ public class SteamStoreService implements StoreService {
     }
 
     @Override
-    public void setNotifyChannel(ServerTextChannel channel) {
+    public EmbedBuilder setNotifyChannel(TextChannel channel) {
         settingRepo.save(new Setting(BootStrapData.CHANNEL_ID, channel.getIdAsString()));
-        log.info("New channel for notify {}", channel.getName());
+        log.info("New channel for notify {}", channel.getIdAsString());
         this.channel = channel;
+        return new EmbedBuilder().setDescription("Крч сюда буду уведомления по скидкам кидать");
     }
 
     private List<Game> getSelloutGames() {
