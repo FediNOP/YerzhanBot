@@ -24,8 +24,8 @@ jobs:
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
         with:
-          source: "YerzhanBot*.jar"
-          target: "~/yerzhanBot"
+          source: "/home/runner/work/YerzhanBot/YerzhanBot/target/YerzhanBot*.jar"
+          target: "/yerzhanbot/"
 #       - name: Executing remote command
 #         uses: appleboy/ssh-action@master
 #         with:
