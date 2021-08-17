@@ -10,9 +10,10 @@
     </parent>
     <groupId>ru.nop</groupId>
     <artifactId>YerzhanBot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>YerzhanBot</name>
-    <description>Demo project for Spring Boot</description>
+    <packaging>jar</packaging>
+    <description>Yerzhan game bot</description>
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
