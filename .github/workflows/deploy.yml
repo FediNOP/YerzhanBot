@@ -25,7 +25,7 @@ jobs:
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
         with:
-          source: "/target/YerzhanBot-*.jar"
+          source: "/home/runner/work/YerzhanBot/YerzhanBot/target/YerzhanBot*.jar"
           target: "/yerzhanbot/"
 
 #     - name: Executing remote command
