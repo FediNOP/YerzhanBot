@@ -1,4 +1,4 @@
-name: Java CI
+name: Verify
 
 # Controls when the workflow will run
 on:
