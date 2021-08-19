@@ -1,2 +1,2 @@
 # YerzhanBot
-Discord games sellout bot
+Discord steam games sellout bot
