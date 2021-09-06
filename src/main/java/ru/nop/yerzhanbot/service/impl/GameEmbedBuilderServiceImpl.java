@@ -13,12 +13,10 @@ public class GameEmbedBuilderServiceImpl implements GameEmbedBuilderService {
     public static final String ID = "Ид";
     public static final String PRICE = "Цена";
     public static final String SELLOUT_PERCENT = "Процент скидки";
-    public static final String NAME = "Название";
 
     @Override
     public EmbedBuilder createEmbedGame(Game game) {
         var embedBuilder = new EmbedBuilder();
-        embedBuilder.setAuthor(game.getName(), game.getUrl(), game.getImageUrl());
         embedBuilder.setTitle(game.getName());
         embedBuilder.setUrl(game.getUrl());
         embedBuilder.addField(ID, game.getId());

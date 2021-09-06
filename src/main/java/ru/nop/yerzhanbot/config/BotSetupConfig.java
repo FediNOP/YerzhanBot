@@ -4,6 +4,7 @@ import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.activity.ActivityType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -30,6 +31,7 @@ public class BotSetupConfig {
         }
         var discordApi = new DiscordApiBuilder().setToken(token).login().join();
         discordApi.addListener(gameCommandsListener);
+        discordApi.updateActivity(ActivityType.PLAYING, "Ержан помоги");
         return discordApi;
     }
 
