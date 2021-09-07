@@ -3,12 +3,12 @@ package ru.nop.yerzhanbot.service.impl;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.springframework.stereotype.Component;
 import ru.nop.yerzhanbot.data.Game;
-import ru.nop.yerzhanbot.service.GameEmbedBuilderService;
+import ru.nop.yerzhanbot.service.EmbedGameService;
 
 import java.awt.*;
 
 @Component
-public class GameEmbedBuilderServiceImpl implements GameEmbedBuilderService {
+public class EmbedGameServiceImpl implements EmbedGameService {
 
     public static final String ID = "Ид";
     public static final String PRICE = "Цена";

@@ -11,6 +11,7 @@ import ru.nop.yerzhanbot.data.Game;
 import ru.nop.yerzhanbot.mapper.Mapper;
 import ru.nop.yerzhanbot.service.StoreRequestService;
 
+// TODO Надо сделать абстрактны класс
 @Slf4j
 @Service
 public class SteamStoreRequestService implements StoreRequestService {

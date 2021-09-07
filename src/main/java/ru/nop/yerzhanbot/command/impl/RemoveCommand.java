@@ -3,7 +3,7 @@ package ru.nop.yerzhanbot.command.impl;
 import org.javacord.api.entity.channel.TextChannel;
 import org.springframework.stereotype.Component;
 import ru.nop.yerzhanbot.command.Command;
-import ru.nop.yerzhanbot.service.StoreService;
+import ru.nop.yerzhanbot.service.BotFacade;
 
 import java.util.List;
 
@@ -11,15 +11,15 @@ import java.util.List;
 public class RemoveCommand implements Command {
 
     public static final String DESCRIPTION = "Удалить игру из списка отслеживаний";
-    private final StoreService storeService;
+    private final BotFacade botFacade;
 
-    public RemoveCommand(StoreService storeService) {
-        this.storeService = storeService;
+    public RemoveCommand(BotFacade botFacade) {
+        this.botFacade = botFacade;
     }
 
     @Override
     public void performCommand(TextChannel channel, String message) {
-        channel.sendMessage(storeService.removeGameFromChecklist(message));
+        channel.sendMessage(botFacade.removeGameFromChecklist(message));
     }
 
     @Override

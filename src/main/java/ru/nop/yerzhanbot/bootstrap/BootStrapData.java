@@ -5,19 +5,19 @@ import org.javacord.api.DiscordApi;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ru.nop.yerzhanbot.repo.SettingRepo;
-import ru.nop.yerzhanbot.service.StoreService;
+import ru.nop.yerzhanbot.service.BotFacade;
 
 @Slf4j
 @Component
 public class BootStrapData implements CommandLineRunner {
 
     public static final String CHANNEL_ID = "channel_id";
-    private final StoreService storeService;
+    private final BotFacade botFacade;
     private final SettingRepo settingRepo;
     private final DiscordApi discordApi;
 
-    public BootStrapData(StoreService storeService, SettingRepo settingRepo, DiscordApi discordApi) {
-        this.storeService = storeService;
+    public BootStrapData(BotFacade botFacade, SettingRepo settingRepo, DiscordApi discordApi) {
+        this.botFacade = botFacade;
         this.settingRepo = settingRepo;
         this.discordApi = discordApi;
     }
@@ -35,6 +35,6 @@ public class BootStrapData implements CommandLineRunner {
         }
         var channelId = channelIdSetting.get().getValue();
         var textChannelById = discordApi.getServerTextChannelById(channelId);
-        textChannelById.ifPresent(storeService::setNotifyChannel);
+        textChannelById.ifPresent(botFacade::setNotifyChannel);
     }
 }
