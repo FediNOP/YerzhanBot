@@ -24,12 +24,12 @@ public class GameCommandsListenerImpl implements GameCommandsListener {
     public void onMessageCreate(MessageCreateEvent messageCreateEvent) {
         var message = messageCreateEvent.getMessage();
         var content = message.getContent();
-        log.info(content);
         if (StringUtil.isNullOrEmpty(content)
                 || message.getAuthor().isBotUser()
                 || !content.toLowerCase().contains(PREFIX.toLowerCase())) {
             return;
         }
+        log.info(content);
 
         var commandRequest = removePrefix(content);
         var command = commands.stream()
