@@ -3,7 +3,7 @@ package ru.nop.yerzhanbot.command.impl;
 import org.javacord.api.entity.channel.TextChannel;
 import org.springframework.stereotype.Component;
 import ru.nop.yerzhanbot.command.Command;
-import ru.nop.yerzhanbot.service.StoreService;
+import ru.nop.yerzhanbot.service.BotFacade;
 
 import java.util.List;
 
@@ -11,15 +11,15 @@ import java.util.List;
 public class GetCheckListCommand implements Command {
 
     public static final String DESCRIPTION = "Получить спсисок отслеживаемых игр";
-    private final StoreService storeService;
+    private final BotFacade botFacade;
 
-    public GetCheckListCommand(StoreService storeService) {
-        this.storeService = storeService;
+    public GetCheckListCommand(BotFacade botFacade) {
+        this.botFacade = botFacade;
     }
 
     @Override
     public void performCommand(TextChannel channel, String message) {
-        channel.sendMessage(storeService.getCheckList());
+        channel.sendMessage(botFacade.getCheckList());
     }
 
     @Override

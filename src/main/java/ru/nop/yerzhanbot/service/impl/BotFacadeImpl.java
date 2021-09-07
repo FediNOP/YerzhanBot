@@ -11,31 +11,31 @@ import ru.nop.yerzhanbot.data.Game;
 import ru.nop.yerzhanbot.data.Setting;
 import ru.nop.yerzhanbot.repo.GameRepo;
 import ru.nop.yerzhanbot.repo.SettingRepo;
-import ru.nop.yerzhanbot.service.GameEmbedBuilderService;
+import ru.nop.yerzhanbot.service.BotFacade;
+import ru.nop.yerzhanbot.service.EmbedGameService;
 import ru.nop.yerzhanbot.service.StoreRequestService;
-import ru.nop.yerzhanbot.service.StoreService;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+//TODO Должна отличать серверы и в будущем магазины
 @Slf4j
 @Component
-public class SteamStoreService implements StoreService {
+public class BotFacadeImpl implements BotFacade {
 
     private final StoreRequestService storeRequestService;
-    private final GameEmbedBuilderService gameEmbedBuilderService;
+    private final EmbedGameService embedGameService;
     private final GameRepo gameRepo;
     private final SettingRepo settingRepo;
     private TextChannel channel;
 
-    public SteamStoreService(StoreRequestService storeRequestService, GameEmbedBuilderService gameEmbedBuilderService, GameRepo gameRepo, SettingRepo settingRepo) {
+    public BotFacadeImpl(StoreRequestService storeRequestService, EmbedGameService embedGameService, GameRepo gameRepo, SettingRepo settingRepo) {
         this.storeRequestService = storeRequestService;
-        this.gameEmbedBuilderService = gameEmbedBuilderService;
+        this.embedGameService = embedGameService;
         this.gameRepo = gameRepo;
         this.settingRepo = settingRepo;
     }
-
 
     @Override
     public EmbedBuilder addGameToCheckList(String request) {
@@ -48,7 +48,7 @@ public class SteamStoreService implements StoreService {
         }
         gameRepo.save(game);
         log.info("Game {} is added to check list", game.getId());
-        return gameEmbedBuilderService.createEmbedGame(game).setFooter("Игра добавлена в отлеживание");
+        return embedGameService.createEmbedGame(game).setFooter("Игра добавлена в отcлеживание");
     }
 
     @Override
@@ -58,8 +58,8 @@ public class SteamStoreService implements StoreService {
             return new EmbedBuilder().setTitle("Игра не найдена");
         }
         gameRepo.delete(game);
-        log.info("Game {} is deleted", game.toString());
-        var embedGames = gameEmbedBuilderService.createListOfEmbedGames(List.of(game));
+        log.info("Game {} is deleted", game);
+        var embedGames = embedGameService.createListOfEmbedGames(List.of(game));
         embedGames.setTitle("Игра удалена");
         return embedGames;
     }
@@ -80,14 +80,14 @@ public class SteamStoreService implements StoreService {
 
         channel.sendMessage("Скидки подъехали");
         notifyGames.stream()
-                .map(gameEmbedBuilderService::createEmbedGame)
+                .map(embedGameService::createEmbedGame)
                 .filter(Objects::nonNull)
                 .forEach(channel::sendMessage);
     }
 
     @Override
     public EmbedBuilder getCheckList() {
-        var listOfEmbedGames = gameEmbedBuilderService.createListOfEmbedGames(gameRepo.findAll());
+        var listOfEmbedGames = embedGameService.createListOfEmbedGames(gameRepo.findAll());
         listOfEmbedGames.setTitle("Список отслеживаемых игр");
         return listOfEmbedGames;
     }

@@ -3,7 +3,7 @@ package ru.nop.yerzhanbot.service;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
-public interface StoreService {
+public interface BotFacade {
 
     EmbedBuilder addGameToCheckList(String request);
 

@@ -3,7 +3,7 @@ package ru.nop.yerzhanbot.command.impl;
 import org.javacord.api.entity.channel.TextChannel;
 import org.springframework.stereotype.Component;
 import ru.nop.yerzhanbot.command.Command;
-import ru.nop.yerzhanbot.service.StoreService;
+import ru.nop.yerzhanbot.service.BotFacade;
 
 import java.util.List;
 
@@ -11,15 +11,15 @@ import java.util.List;
 public class SetNotifyChannelCommand implements Command {
 
     public static final String DESCRIPTION = "Получить помощь";
-    private final StoreService storeService;
+    private final BotFacade botFacade;
 
-    public SetNotifyChannelCommand(StoreService storeService) {
-        this.storeService = storeService;
+    public SetNotifyChannelCommand(BotFacade botFacade) {
+        this.botFacade = botFacade;
     }
 
     @Override
     public void performCommand(TextChannel channel, String message) {
-        channel.sendMessage(storeService.setNotifyChannel(channel));
+        channel.sendMessage(botFacade.setNotifyChannel(channel));
     }
 
     @Override
