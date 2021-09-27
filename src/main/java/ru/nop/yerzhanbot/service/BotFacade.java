@@ -2,6 +2,9 @@ package ru.nop.yerzhanbot.service;
 
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.server.Server;
+
+import java.util.List;
 
 public interface BotFacade {
 
@@ -9,10 +12,9 @@ public interface BotFacade {
 
     EmbedBuilder removeGameFromChecklist(String request);
 
-    EmbedBuilder setNotifyChannel(TextChannel channel);
+    List<EmbedBuilder> getSelloutGames();
 
-    void runCheckSellout();
+    void setNotifyChannel(Server server, TextChannel channel);
 
     EmbedBuilder getCheckList();
-
 }

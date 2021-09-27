@@ -1,6 +1,7 @@
 package ru.nop.yerzhanbot.command.impl;
 
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.server.Server;
 import org.springframework.stereotype.Component;
 import ru.nop.yerzhanbot.command.Command;
 import ru.nop.yerzhanbot.service.BotFacade;
@@ -18,7 +19,7 @@ public class RemoveCommand implements Command {
     }
 
     @Override
-    public void performCommand(TextChannel channel, String message) {
+    public void performCommand(Server server, TextChannel channel, String message) {
         channel.sendMessage(botFacade.removeGameFromChecklist(message));
     }
 
