@@ -6,6 +6,7 @@ import ru.nop.yerzhanbot.data.Game;
 import ru.nop.yerzhanbot.service.EmbedGameService;
 
 import java.awt.*;
+import java.util.List;
 
 @Component
 public class EmbedGameServiceImpl implements EmbedGameService {
@@ -13,6 +14,8 @@ public class EmbedGameServiceImpl implements EmbedGameService {
     public static final String ID = "Ид";
     public static final String PRICE = "Цена";
     public static final String SELLOUT_PERCENT = "Процент скидки";
+    public static final List<String> MINIMUM_REQ_KEYS = List.of("Minimum", "OS", "Processor", "Memory",
+            "Graphics", "DirectX", "Storage", "Sound");
 
     @Override
     public EmbedBuilder createEmbedGame(Game game) {
@@ -35,7 +38,5 @@ public class EmbedGameServiceImpl implements EmbedGameService {
         gameList.forEach(game -> embedBuilder.addField(game.getName(), ID + ": " + game.getId()));
         return embedBuilder;
     }
-
-
 
 }

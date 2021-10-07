@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import ru.nop.yerzhanbot.listeners.GameCommandsListener;
+import ru.nop.yerzhanbot.listeners.GameReactionListener;
 
 @Slf4j
 @Configuration
@@ -16,10 +17,12 @@ public class BotSetupConfig {
 
     private final Environment environment;
     private final GameCommandsListener gameCommandsListener;
+    private final GameReactionListener gameReactionListener;
 
-    public BotSetupConfig(Environment environment, GameCommandsListener gameCommandsListener) {
+    public BotSetupConfig(Environment environment, GameCommandsListener gameCommandsListener, GameReactionListener gameReactionListener) {
         this.environment = environment;
         this.gameCommandsListener = gameCommandsListener;
+        this.gameReactionListener = gameReactionListener;
     }
 
     @Bean
@@ -31,6 +34,7 @@ public class BotSetupConfig {
         }
         var discordApi = new DiscordApiBuilder().setToken(token).login().join();
         discordApi.addListener(gameCommandsListener);
+        discordApi.addListener(gameReactionListener);
         discordApi.updateActivity(ActivityType.PLAYING, "Ержан помоги");
         return discordApi;
     }

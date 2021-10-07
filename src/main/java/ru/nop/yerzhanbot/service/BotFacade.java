@@ -17,4 +17,7 @@ public interface BotFacade {
     void setNotifyChannel(Server server, TextChannel channel);
 
     EmbedBuilder getCheckList();
+
+    String getGameMinimumRequirements(String request);
+
 }

@@ -24,6 +24,8 @@ public class Game {
 
     private String price;
 
+    private String minimumRequirements;
+
     public Game() {
         this.id = "";
         this.name = "";
@@ -31,6 +33,7 @@ public class Game {
         this.imageUrl = "";
         this.discountPercent = 0;
         this.price = "";
+        this.minimumRequirements = "";
     }
 
 }
