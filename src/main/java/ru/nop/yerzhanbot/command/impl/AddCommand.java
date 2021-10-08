@@ -20,7 +20,8 @@ public class AddCommand implements Command {
 
     @Override
     public void performCommand(Server server, TextChannel channel, String message) {
-        channel.sendMessage(botFacade.addGameToCheckList(message));
+        var messageBuilder = botFacade.addGameToCheckList(message);
+        messageBuilder.send(channel);
     }
 
     @Override
