@@ -4,12 +4,10 @@ import io.netty.util.internal.StringUtil;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import ru.nop.yerzhanbot.builder.BotMessageBuilder;
 import ru.nop.yerzhanbot.data.Game;
 import ru.nop.yerzhanbot.data.NotifyChannel;
 import ru.nop.yerzhanbot.repo.GameRepo;
@@ -40,23 +38,17 @@ public class BotFacadeImpl implements BotFacade {
     }
 
     @Override
-    public MessageBuilder addGameToCheckList(String request) {
+    public EmbedBuilder addGameToCheckList(String request) {
         var game = storeRequestService.findGame(request);
         if (game == null || StringUtil.isNullOrEmpty(game.getId())) {
-            return new MessageBuilder().setContent("Игра не найдена");
+            return new EmbedBuilder().setTitle("Игра не найдена");
         }
         if (gameRepo.existsById(game.getId())) {
-            return new BotMessageBuilder()
-                    .withEmbed(new EmbedBuilder().setTitle(game.getName()).setDescription("Игра уже добавлена"))
-                    .withMinReqButton()
-                    .build();
+            return new EmbedBuilder().setTitle(game.getName()).setDescription("Игра уже добавлена");
         }
         gameRepo.save(game);
         log.info("Game {} is added to check list", game.getId());
-        return new BotMessageBuilder()
-                .withEmbed(embedGameService.createEmbedGame(game).setFooter("Игра добавлена в отcлеживание"))
-                .withMinReqButton()
-                .build();
+        return embedGameService.createEmbedGame(game).setFooter("Игра добавлена в отcлеживание");
     }
 
     @Override
