@@ -1,16 +1,17 @@
 package ru.nop.yerzhanbot.service.impl;
 
 import io.netty.util.internal.StringUtil;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.server.Server;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import ru.nop.yerzhanbot.bootstrap.BootStrapData;
 import ru.nop.yerzhanbot.data.Game;
-import ru.nop.yerzhanbot.data.Setting;
+import ru.nop.yerzhanbot.data.NotifyChannel;
 import ru.nop.yerzhanbot.repo.GameRepo;
-import ru.nop.yerzhanbot.repo.SettingRepo;
+import ru.nop.yerzhanbot.repo.NotifyChannelRepo;
 import ru.nop.yerzhanbot.service.BotFacade;
 import ru.nop.yerzhanbot.service.EmbedGameService;
 import ru.nop.yerzhanbot.service.StoreRequestService;
@@ -27,14 +28,13 @@ public class BotFacadeImpl implements BotFacade {
     private final StoreRequestService storeRequestService;
     private final EmbedGameService embedGameService;
     private final GameRepo gameRepo;
-    private final SettingRepo settingRepo;
-    private TextChannel channel;
+    private final NotifyChannelRepo notifyChannelRepo;
 
-    public BotFacadeImpl(StoreRequestService storeRequestService, EmbedGameService embedGameService, GameRepo gameRepo, SettingRepo settingRepo) {
+    public BotFacadeImpl(StoreRequestService storeRequestService, EmbedGameService embedGameService, GameRepo gameRepo, NotifyChannelRepo notifyChannelRepo) {
         this.storeRequestService = storeRequestService;
         this.embedGameService = embedGameService;
         this.gameRepo = gameRepo;
-        this.settingRepo = settingRepo;
+        this.notifyChannelRepo = notifyChannelRepo;
     }
 
     @Override
@@ -65,24 +65,18 @@ public class BotFacadeImpl implements BotFacade {
     }
 
     @Override
-    public void runCheckSellout() {
-        if (channel == null) {
-            log.warn("No channel set");
-            return;
-        }
-        updateCheckListGameData();
-        var notifyGames = getSelloutGames();
-        if (CollectionUtils.isEmpty(notifyGames)) {
-            channel.sendMessage("Сегодня нет скидок :(");
-            log.info("No sellout game found");
-            return;
-        }
+    public List<EmbedBuilder> getSelloutGames() {
 
-        channel.sendMessage("Скидки подъехали");
-        notifyGames.stream()
+        updateCheckListGameData();
+        var notifyGames = checkSellout();
+        if (CollectionUtils.isEmpty(notifyGames)) {
+            log.info("No sellout game found");
+            return List.of();
+        }
+        return notifyGames.stream()
                 .map(embedGameService::createEmbedGame)
                 .filter(Objects::nonNull)
-                .forEach(channel::sendMessage);
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -93,14 +87,12 @@ public class BotFacadeImpl implements BotFacade {
     }
 
     @Override
-    public EmbedBuilder setNotifyChannel(TextChannel channel) {
-        settingRepo.save(new Setting(BootStrapData.CHANNEL_ID, channel.getIdAsString()));
-        log.info("New channel for notify {}", channel.getIdAsString());
-        this.channel = channel;
-        return new EmbedBuilder().setDescription("Крч сюда буду уведомления по скидкам кидать");
+    public void setNotifyChannel(@NonNull Server server, @NonNull TextChannel channel) {
+        notifyChannelRepo.save(new NotifyChannel(server.getId(), channel.getId()));
+        log.info("New notify channel for server {} and channel {}", server.getIdAsString(), channel.getIdAsString());
     }
 
-    private List<Game> getSelloutGames() {
+    public List<Game> checkSellout() {
         return gameRepo.findAll().stream()
                 .filter(game -> game.getDiscountPercent() > 0)
                 .collect(Collectors.toList());

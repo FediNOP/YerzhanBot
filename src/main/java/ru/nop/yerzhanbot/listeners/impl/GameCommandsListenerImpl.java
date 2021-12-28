@@ -22,14 +22,16 @@ public class GameCommandsListenerImpl implements GameCommandsListener {
 
     @Override
     public void onMessageCreate(MessageCreateEvent messageCreateEvent) {
+        var server = messageCreateEvent.getServer().orElse(null);
         var message = messageCreateEvent.getMessage();
         var content = message.getContent();
-        log.info(content);
         if (StringUtil.isNullOrEmpty(content)
                 || message.getAuthor().isBotUser()
-                || !content.toLowerCase().contains(PREFIX.toLowerCase())) {
+                || !content.toLowerCase().contains(PREFIX.toLowerCase())
+                || server == null) {
             return;
         }
+        log.info(content);
 
         var commandRequest = removePrefix(content);
         var command = commands.stream()
@@ -41,7 +43,7 @@ public class GameCommandsListenerImpl implements GameCommandsListener {
             log.error("Command '{}' not found", commandRequest);
             return;
         }
-        command.performCommand(messageCreateEvent.getChannel(),
+        command.performCommand(server, messageCreateEvent.getChannel(),
                 replaceAliases(commandRequest, command.getAliases()));
     }
 
@@ -61,6 +63,11 @@ public class GameCommandsListenerImpl implements GameCommandsListener {
                 result = result.replaceAll(part.toLowerCase(), "");
         }
         return result.trim();
+    }
+
+    @Override
+    public List<Command> getCommands() {
+        return commands;
     }
 
 }
