@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class SetNotifyChannelCommand implements Command {
 
-    public static final String DESCRIPTION = "Получить помощь";
+    public static final String DESCRIPTION = "Указать канал для уведомления по скидкам";
     private final BotFacade botFacade;
 
     public SetNotifyChannelCommand(BotFacade botFacade) {
