@@ -92,12 +92,6 @@ public class BotFacadeImpl implements BotFacade {
         log.info("New notify channel for server {} and channel {}", server.getIdAsString(), channel.getIdAsString());
     }
 
-    @Override
-    public String getGameMinimumRequirements(String request) {
-        var game = gameRepo.findById(request).orElse(storeRequestService.findGame(request));
-        return game != null ? game.getMinimumRequirements() : "Не нашел мин требования для этой игры";
-    }
-
     public List<Game> checkSellout() {
         return gameRepo.findAll().stream()
                 .filter(game -> game.getDiscountPercent() > 0)
