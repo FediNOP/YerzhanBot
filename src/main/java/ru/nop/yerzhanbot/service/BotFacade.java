@@ -14,7 +14,7 @@ public interface BotFacade {
 
     List<EmbedBuilder> getSelloutGames();
 
-    void setNotifyChannel(Server server, TextChannel channel);
-
     EmbedBuilder getCheckList();
+
+    void setNotifyChannel(Server server, TextChannel channel);
 }

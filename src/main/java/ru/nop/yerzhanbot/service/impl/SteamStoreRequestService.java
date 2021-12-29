@@ -33,7 +33,6 @@ public class SteamStoreRequestService implements StoreRequestService {
             log.warn("Game id {} request not found", id);
             return null;
         }
-
         return mapper.map(body.get(id));
     }
 

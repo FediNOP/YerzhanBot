@@ -1,6 +1,5 @@
 package ru.nop.yerzhanbot.service.impl;
 
-import io.netty.util.internal.StringUtil;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.javacord.api.entity.channel.TextChannel;
@@ -10,56 +9,56 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import ru.nop.yerzhanbot.data.Game;
 import ru.nop.yerzhanbot.data.NotifyChannel;
-import ru.nop.yerzhanbot.repo.GameRepo;
-import ru.nop.yerzhanbot.repo.NotifyChannelRepo;
 import ru.nop.yerzhanbot.service.BotFacade;
 import ru.nop.yerzhanbot.service.EmbedGameService;
-import ru.nop.yerzhanbot.service.StoreRequestService;
+import ru.nop.yerzhanbot.service.GameService;
+import ru.nop.yerzhanbot.service.ServerDataService;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-//TODO Должна отличать серверы и в будущем магазины
 @Slf4j
 @Component
 public class BotFacadeImpl implements BotFacade {
 
-    private final StoreRequestService storeRequestService;
     private final EmbedGameService embedGameService;
-    private final GameRepo gameRepo;
-    private final NotifyChannelRepo notifyChannelRepo;
+    private final GameService gameService;
+    private final ServerDataService serverDataService;
 
-    public BotFacadeImpl(StoreRequestService storeRequestService, EmbedGameService embedGameService, GameRepo gameRepo, NotifyChannelRepo notifyChannelRepo) {
-        this.storeRequestService = storeRequestService;
+    public BotFacadeImpl(EmbedGameService embedGameService, GameService gameService, ServerDataService serverDataService) {
         this.embedGameService = embedGameService;
-        this.gameRepo = gameRepo;
-        this.notifyChannelRepo = notifyChannelRepo;
+        this.gameService = gameService;
+        this.serverDataService = serverDataService;
     }
 
     @Override
     public EmbedBuilder addGameToCheckList(String request) {
-        var game = storeRequestService.findGame(request);
-        if (game == null || StringUtil.isNullOrEmpty(game.getId())) {
+
+        final var gameFromCache = gameService.getGameFromRepo(request);
+        if (gameFromCache != null) {
+            return new EmbedBuilder().setTitle(gameFromCache.getName()).setDescription("Игра уже добавлена");
+        }
+
+        final var gameFromStore = gameService.getGameFromStore(request);
+        if (gameFromStore == null) {
             return new EmbedBuilder().setTitle("Игра не найдена");
         }
-        if (gameRepo.existsById(game.getId())) {
-            return new EmbedBuilder().setTitle(game.getName()).setDescription("Игра уже добавлена");
-        }
-        gameRepo.save(game);
-        log.info("Game {} is added to check list", game.getId());
-        return embedGameService.createEmbedGame(game).setFooter("Игра добавлена в отcлеживание");
+
+        gameService.saveGame(gameFromStore);
+        log.info("Game {} is added to check list", gameFromStore.getId());
+        return embedGameService.createEmbedGame(gameFromStore).setFooter("Игра добавлена в отcлеживание");
     }
 
     @Override
     public EmbedBuilder removeGameFromChecklist(String request) {
-        var game = gameRepo.findById(request).orElse(null);
-        if (game == null) {
-            return new EmbedBuilder().setTitle("Игра не найдена");
+        final var gameFromRepo = gameService.getGameFromRepo(request);
+        if (gameFromRepo == null) {
+            return new EmbedBuilder().setTitle("Игра не в списке отсле");
         }
-        gameRepo.delete(game);
-        log.info("Game {} is deleted", game);
-        var embedGames = embedGameService.createListOfEmbedGames(List.of(game));
+        gameService.removeGame(gameFromRepo);
+        log.info("Game {} is deleted", gameFromRepo);
+        var embedGames = embedGameService.createListOfEmbedGames(List.of(gameFromRepo));
         embedGames.setTitle("Игра удалена");
         return embedGames;
     }
