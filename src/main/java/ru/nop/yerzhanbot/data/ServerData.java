@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -20,5 +21,10 @@ public class ServerData {
 
     @DBRef
     private Set<Game> games;
+
+    public ServerData(Long id) {
+        this.id = id;
+        games = new HashSet<>();
+    }
 
 }

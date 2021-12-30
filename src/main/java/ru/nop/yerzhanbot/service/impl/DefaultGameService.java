@@ -58,4 +58,20 @@ public class DefaultGameService implements GameService {
         return getGameFromRepo(id) != null;
     }
 
+    @Override
+    public void updateGameInfo(String id) {
+        if (!isGameSavedInRepo(id)) {
+            return;
+        }
+        final var gameFromStore = getGameFromStore(id);
+        if (gameFromStore != null) {
+            gameRepo.save(gameFromStore);
+        }
+    }
+
+    @Override
+    public void updateAllGamesInfos() {
+
+    }
+
 }

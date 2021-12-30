@@ -16,4 +16,9 @@ public interface GameService {
     void removeGame(@NonNull Game gameId);
 
     boolean isGameSavedInRepo(String id);
+
+    void updateGameInfo(String id);
+
+    void updateAllGamesInfos();
+
 }
